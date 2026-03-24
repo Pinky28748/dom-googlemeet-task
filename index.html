@@ -90,14 +90,14 @@
 
       let collapsed = false;
 
-      // AVATAR COLOR FUNCTION
+      
       function getColor(name) {
         let sum = 0;
         for (let i = 0; i < name.length; i++) sum += name.charCodeAt(i);
         return colors[sum % colors.length];
       }
 
-      // RENDER MEMBERS
+      
       function renderMembers(list) {
         membersContainer.innerHTML = "";
         list.forEach((name) => {
@@ -143,14 +143,14 @@
 
       renderMembers(names);
 
-      // SEARCH
+      
       document.querySelector("input").addEventListener("input", (e) => {
         const value = e.target.value.toLowerCase();
         const filtered = names.filter((n) => n.toLowerCase().includes(value));
         renderMembers(filtered);
       });
 
-      // COLLAPSE
+      
       toggleBtn.addEventListener("click", () => {
         collapsed = !collapsed;
         membersContainer.style.display = collapsed ? "none" : "flex";
@@ -165,7 +165,13 @@
 
         const popup = document.createElement("div");
         popup.id = "invitePopup";
-
+        
+        const popup1 = document.createElement("div");
+        popup1.id = "header";
+        
+        const heading = document.createElement("h1");
+        heading.innerText="Add People"
+        
         const closeBtn = document.createElement("span");
         closeBtn.innerText = "×";
         closeBtn.classList.add("closeBtn");
@@ -186,8 +192,10 @@
         const suggestions = document.createElement("div");
         suggestions.classList.add("suggestions");
         suggestions.innerText = "No suggestions";
-
-        popup.appendChild(closeBtn);
+        
+        popup1.appendChild(heading);
+        popup1.appendChild(closeBtn);
+        popup.appendChild(popup1);
         popup.appendChild(form);
         popup.appendChild(suggestions);
 
