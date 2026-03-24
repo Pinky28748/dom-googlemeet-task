@@ -1,0 +1,200 @@
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google Meet UI</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/style.css"></link>
+  </head>
+
+  <body>
+    <div class="outer-div">
+      <div class="first-div">
+        <span>People</span>
+        <span class="material-symbols-outlined">close</span>
+      </div>
+
+      <div class="second-div">
+        <button class="btn btn-muted">
+          <span class="material-symbols-outlined">mic_off</span>
+          All muted
+        </button>
+        <button class="btn btn-add">
+          <span class="material-symbols-outlined">person_add</span>
+          Add people
+        </button>
+      </div>
+
+      <div class="third-div">
+        <input type="text" placeholder="Search for people" />
+      </div>
+
+      <div class="fourth-div">IN THE MEETING</div>
+
+      <div class="fifth-div">
+        <div class="heading">
+          <span>Contributors</span>
+          <div class="heading-right">
+            <span id="count">0</span>
+            <span id="toggleBtn" class="material-symbols-outlined"
+              >expand_less</span
+            >
+          </div>
+        </div>
+
+        <div class="members"></div>
+      </div>
+    </div>
+
+    <script>
+      // MEMBERS DATA
+      const names = [
+        "Vidhya Skill School (You)",
+        "Abhishek Garg",
+        "Almas Chamadiya",
+        "ANKIT RAJPUT",
+        "Aviral Jain",
+        "Ayush Gupta",
+        "Deepanshu Garg",
+        "Pinky Thawani",
+        "Pranav Khare",
+        "Rakshit Dalal",
+        "Shivani Vishwakarma",
+        "Shruti Prajapati",
+        "vikas vanve",
+      ];
+
+      const colors = [
+        "#F44336",
+        "#E91E63",
+        "#9C27B0",
+        "#673AB7",
+        "#3F51B5",
+        "#2196F3",
+        "#009688",
+        "#4CAF50",
+        "#FF9800",
+        "#795548",
+        "#607D8B",
+      ];
+
+      const membersContainer = document.querySelector(".members");
+      const countEl = document.getElementById("count");
+      const toggleBtn = document.getElementById("toggleBtn");
+
+      let collapsed = false;
+
+      // AVATAR COLOR FUNCTION
+      function getColor(name) {
+        let sum = 0;
+        for (let i = 0; i < name.length; i++) sum += name.charCodeAt(i);
+        return colors[sum % colors.length];
+      }
+
+      // RENDER MEMBERS
+      function renderMembers(list) {
+        membersContainer.innerHTML = "";
+        list.forEach((name) => {
+          const memberDiv = document.createElement("div");
+          memberDiv.classList.add("member");
+
+          const left = document.createElement("div");
+          left.classList.add("member-left");
+
+          const avatar = document.createElement("div");
+          avatar.classList.add("avatar");
+          avatar.style.backgroundColor = getColor(name);
+          avatar.innerText = name.charAt(0).toUpperCase();
+
+          const nameSpan = document.createElement("span");
+          nameSpan.classList.add("name");
+          nameSpan.innerText = name;
+
+          left.appendChild(avatar);
+          left.appendChild(nameSpan);
+
+          const right = document.createElement("div");
+          right.classList.add("member-right");
+
+          const micIcon = document.createElement("span");
+          micIcon.classList.add("material-symbols-outlined");
+          micIcon.innerText = "mic_off";
+
+          const menuIcon = document.createElement("span");
+          menuIcon.classList.add("material-symbols-outlined");
+          menuIcon.innerText = "more_vert";
+
+          right.appendChild(micIcon);
+          right.appendChild(menuIcon);
+
+          memberDiv.appendChild(left);
+          memberDiv.appendChild(right);
+
+          membersContainer.appendChild(memberDiv);
+        });
+        countEl.innerText = list.length;
+      }
+
+      renderMembers(names);
+
+      // SEARCH
+      document.querySelector("input").addEventListener("input", (e) => {
+        const value = e.target.value.toLowerCase();
+        const filtered = names.filter((n) => n.toLowerCase().includes(value));
+        renderMembers(filtered);
+      });
+
+      // COLLAPSE
+      toggleBtn.addEventListener("click", () => {
+        collapsed = !collapsed;
+        membersContainer.style.display = collapsed ? "none" : "flex";
+        toggleBtn.innerText = collapsed ? "expand_more" : "expand_less";
+      });
+
+      // ADD PEOPLE POPUP
+      const addBtn = document.querySelector(".btn-add");
+      addBtn.addEventListener("click", () => {
+        const overlay = document.createElement("div");
+        overlay.id = "inviteOverlay";
+
+        const popup = document.createElement("div");
+        popup.id = "invitePopup";
+
+        const closeBtn = document.createElement("span");
+        closeBtn.innerText = "×";
+        closeBtn.classList.add("closeBtn");
+        closeBtn.addEventListener("click", () => overlay.remove());
+
+        const form = document.createElement("form");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Enter name or email";
+
+        const inviteBtn = document.createElement("button");
+        inviteBtn.type = "submit";
+        inviteBtn.innerText = "Invite";
+
+        form.appendChild(input);
+        form.appendChild(inviteBtn);
+
+        const suggestions = document.createElement("div");
+        suggestions.classList.add("suggestions");
+        suggestions.innerText = "No suggestions";
+
+        popup.appendChild(closeBtn);
+        popup.appendChild(form);
+        popup.appendChild(suggestions);
+
+        overlay.appendChild(popup);
+        document.body.appendChild(overlay);
+      });
+    </script>
+  </body>
+</html>
+```
